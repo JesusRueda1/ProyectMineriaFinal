@@ -1,55 +1,66 @@
-# To learn more about how to use Nix to configure your environment
-# see: https://developers.google.com/idx/guides/customize-idx-env
-{ pkgs, ... }: {
-  # Which nixpkgs channel to use.
-  channel = "stable-25.05"; # or "unstable"
-  # Use https://search.nixos.org/packages to find packages
+{ pkgs, ... }:
+
+{
+  # 1. Paquetes del Sistema (Nix)
+  # Solo instalamos Python y Pip aquí. Las librerías específicas van en requirements.txt
   packages = [
-    # pkgs.go
-    pkgs.python314
-    pkgs.uv
-    # pkgs.python311Packages.pip
-    # pkgs.nodejs_20
-    # pkgs.nodePackages.nodemon
+    pkgs.python3
+    pkgs.python3Packages.pip
+    pkgs.python3Packages.virtualenv
   ];
-  # Sets environment variables in the workspace
-  env = {};
+
+  # 2. Variables de Entorno
+  env = {
+    # Streamlit necesita saber qué puerto usar
+    PORT = "9000"; 
+  };
+
+  # 3. Configuración del Espacio de Trabajo
   idx = {
-    # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
-      # "vscodevim.vim"
-      "google.gemini-cli-vscode-ide-companion"
       "ms-python.python"
     ];
-    # Enable previews
+
+    workspace = {
+      # Se ejecuta UNA vez al crear el entorno
+      onCreate = {
+        setup-venv = ''
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+        '';
+      };
+      # Se ejecuta cada vez que reinicias la máquina
+      onStart = {
+        install-deps = ''
+          source .venv/bin/activate
+          pip install -r requirements.txt
+        '';
+      };
+    };
+
+    # 4. Vista Previa (El botón "Preview")
     previews = {
       enable = true;
       previews = {
-        # web = {
-        #   # Example: run "npm run dev" with PORT set to IDX's defined port for previews,
-        #   # and show it in IDX's web preview panel
-        #   command = ["npm" "run" "dev"];
-        #   manager = "web";
-        #   env = {
-        #     # Environment variables to set for your server
-        #     PORT = "$PORT";
-        #   };
-        # };
-      };
-    };
-    # Workspace lifecycle hooks
-    workspace = {
-      # Runs when a workspace is first created
-      onCreate = {
-        # Example: install JS dependencies from NPM
-        # npm-install = "npm install";
-        # Open editors for the following files by default, if they exist:
-        default.openFiles = [ "README.md" ];
-      };
-      # Runs when the workspace is (re)started
-      onStart = {
-        # Example: start a background task to watch and re-build backend code
-        # watch-backend = "npm run watch-backend";
+        web = {
+          # Usamos el streamlit DENTRO del entorno virtual (.venv)
+          command = [
+            "./.venv/bin/streamlit"
+            "run"
+            "main.py"
+            "--server.port"
+            "$PORT"
+            "--server.address"
+            "0.0.0.0"
+            "--server.enableCORS"
+            "false"
+            "--server.enableXsrfProtection"
+            "false"
+          ];
+          manager = "web";
+        };
       };
     };
   };

@@ -1,0 +1,9 @@
+        git clone https://github.com/tu-usuario/tu-proyecto.git
+        ```
+
+3.  **Configurar credenciales (si es necesario):**
+    *   Dependiendo de la configuración de tu repositorio (público/privado, 2FA), es posible que necesites configurar tus credenciales de Git. Firebase Studio suele integrarse con los proveedores de Git más comunes y puede guiarte para autenticarte.
+
+**Para obtener instrucciones más detalladas y visuales sobre cómo empezar con Firebase Studio y la integración con Git, te recomiendo encarecidamente que consultes la documentación oficial:**
+
+*   **Firebase Studio: Guía de introducción:** [https://firebase.google.com/docs/studio/get-started](https://firebase.google.com/docs/studio/get-started)
