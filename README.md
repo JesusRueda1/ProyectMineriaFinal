@@ -8,7 +8,7 @@ Sistema de Análisis y Predicción de Ventas
 | Asignatura | Minería de Datos - 7AR |
 | :--- | :--- |
 | Docente | Ing. Edgar Morillo Vergel |
-| Fecha | Noviembre 2023 |
+| Fecha | Noviembre 2025 |
 
 ## Integrantes del Equipo
 
@@ -96,4 +96,4 @@ El desarrollo del proyecto abarca la totalidad de los requerimientos establecido
 5. Presentación y código: Estructura organizada modularmente siguiendo buenas prácticas de ingeniería.
 
 ---
-Universidad de la Costa - 2023
+Corporación universitaria americana
